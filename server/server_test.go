@@ -78,21 +78,25 @@ func RunClient(ip string, files []*TestFile) {
 	}
 }
 
+func SetupConfig() chan FileOut {
+	out := make(chan FileOut)
+	SetServerConfig(ServerConfig{
+		Out:      out,
+		Handlers: TestHooks{},
+		Verbose:  true,
+	})
+	return out
+}
+
 func RunServer(ip string, files []*TestFile) {
 	ln, err := net.Listen("tcp", ip)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	out := make(chan FileOut)
-
-	SetTransferOutput(out)
-	SetVerbose(true)
-	SetTransferHooks(TestHooks{})
-
 	go ServeWith(ln)
 	go func() {
-		for o := range out {
+		for o := range SetupConfig() {
 			for _, f := range files {
 				if strings.Contains(f.name, o.File.Name) {
 					f.recvdata = o.Buffer
@@ -100,6 +104,14 @@ func RunServer(ip string, files []*TestFile) {
 			}
 		}
 	}()
+}
+
+func TestConfiguration(t *testing.T) {
+	SetupConfig()
+}
+
+func TestDefaultServe(t *testing.T) {
+	go Serve()
 }
 
 func TestServer(t *testing.T) {

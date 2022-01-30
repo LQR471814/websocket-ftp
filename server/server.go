@@ -36,9 +36,13 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-var handlers ServerHooks
-var out chan FileOut
-var verbose = false
+type ServerConfig struct {
+	Handlers ServerHooks
+	Out      chan FileOut
+	Verbose  bool
+}
+
+var config ServerConfig
 
 func sendJSON(c *websocket.Conn, obj interface{}) {
 	msg, err := json.Marshal(obj)
@@ -51,7 +55,7 @@ func sendJSON(c *websocket.Conn, obj interface{}) {
 
 func outputWriter(f File, datachan chan []byte) {
 	var output io.Writer
-	if out == nil {
+	if config.Out == nil {
 		f, err := os.Create(f.Name)
 		if err != nil {
 			log.Fatal(err)
@@ -60,7 +64,7 @@ func outputWriter(f File, datachan chan []byte) {
 		output = f
 	} else {
 		fileoutput := &FileOut{File: f}
-		defer func() { out <- *fileoutput }()
+		defer func() { config.Out <- *fileoutput }()
 		output = fileoutput
 	}
 
@@ -71,7 +75,7 @@ func outputWriter(f File, datachan chan []byte) {
 		w.Write(data)
 		writtenBytes += len(data)
 		if writtenBytes >= f.Size {
-			if verbose {
+			if config.Verbose {
 				log.Printf("--> DONE: Wrote %v to output\n", f.Name)
 			}
 			w.Flush()
@@ -82,7 +86,7 @@ func outputWriter(f File, datachan chan []byte) {
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	var updateRatio = 24
-	if verbose {
+	if config.Verbose {
 		updateRatio = 4
 	}
 
@@ -132,8 +136,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			transfer.State.Received += len(contents)
 
 			if transfer.State.Received >= updateNext {
-				if handlers != nil {
-					handlers.OnTransferUpdate(transfer)
+				if config.Handlers != nil {
+					config.Handlers.OnTransferUpdate(transfer)
 				}
 				updateNext += updateOffset
 			}
@@ -148,7 +152,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 func eventHandler(t *Transfer, event Event) {
 	cell, ok := EventStateMatrix[event][t.State.Number]
-	if verbose {
+	if config.Verbose {
 		log.Println("Event", event, "State", t.State, cell)
 	}
 
@@ -166,8 +170,8 @@ func actionHandler(t *Transfer, action Action) {
 	switch action {
 	case DisplayFileRequests:
 		var accept = true
-		if handlers != nil {
-			accept = <-handlers.OnTransferRequest(t.Data)
+		if config.Handlers != nil {
+			accept = <-config.Handlers.OnTransferRequest(t.Data)
 		}
 		if accept {
 			eventHandler(t, userAccept)
@@ -198,22 +202,12 @@ func actionHandler(t *Transfer, action Action) {
 	}
 }
 
-func SetVerbose(v bool) {
-	verbose = v
-}
-
-func SetTransferHooks(h ServerHooks) {
-	handlers = h
-}
-
-func SetTransferOutput(c chan FileOut) {
-	out = c
+func SetServerConfig(cfg ServerConfig) {
+	config = cfg
 }
 
 func Serve() {
-	server := http.Server{
-		Handler: http.HandlerFunc(Handler),
-	}
+	server := http.Server{Handler: http.HandlerFunc(Handler)}
 	server.ListenAndServe()
 }
 
