@@ -1,5 +1,6 @@
 # JS
 node_modules
 package-lock.json
-*.js
+
+client/lib
 *.out

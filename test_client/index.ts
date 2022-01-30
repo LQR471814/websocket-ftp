@@ -1,4 +1,4 @@
-import { Transfer } from '../client/upload'
+import { Transfer } from '../client/src/upload'
 import { readFileSync } from 'fs'
 import { basename } from 'path'
 

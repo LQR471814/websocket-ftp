@@ -2,12 +2,19 @@
   "name": "websocket-ftp",
   "version": "0.1.0",
   "description": "A file transport protocol built on websockets",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "prepublishOnly": "npm "
   },
   "author": "LQR471814",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LQR471814/websocket-ftp.git"
+  },
+  "keywords": ["ftp", "websocket", "ws"],
   "devDependencies": {
     "@types/ws": "^8.2.2",
     "typescript": "^4.5.5"
