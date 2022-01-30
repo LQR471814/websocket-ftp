@@ -1,0 +1,19 @@
+{
+  "name": "test-websocket-client",
+  "version": "0.1.0",
+  "description": "An interface for testing the websocket client",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "LQR471814",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/ws": "^8.2.2",
+    "@types/yargs": "^17.0.8",
+    "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "yargs": "^17.3.1"
+  }
+}

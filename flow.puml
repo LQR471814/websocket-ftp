@@ -1,0 +1,26 @@
+@startuml Upload Flow Chart (Accept Files)
+
+Client -> Server: Initiate Connection
+...
+Client -> Server: Send File Requests
+Server -> Client: Yes to all
+...
+Client -> Server: File1 Start Signal
+Client -> Server: File1 Contents
+Server -> Client: Confirmation (I got it)
+...
+Client -> Server: File2 Start Signal
+Client -> Server: File2 Contents
+Server -> Client: Confirmation (I got it)
+...
+Client -> Client: Update GUI with finished upload message
+
+@enduml
+
+@startuml Upload Flow Chart (Deny all files)
+
+Client -> Server: Send File1 Request
+Server -> Client: Deny all files
+Client -> Client: Show Cancel Message
+
+@enduml
