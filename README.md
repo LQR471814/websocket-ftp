@@ -35,8 +35,8 @@ new Transfer(
 ```golang
 type Hooks struct{}
 
-func (h Hooks) OnTransferRequest(metadata TransferMetadata) chan bool {
-    log.Println("Got requests", metadata)
+func (h Hooks) OnTransferRequest(t *Transfer) chan bool {
+    log.Println("Got requests", t.Data.Files)
     c := make(chan bool, 1)
     c <- true
     return c
@@ -51,10 +51,17 @@ func (h Hooks) OnTransferUpdate(t *Transfer) {
     )
 }
 
-func (h Hooks) OnTransfersComplete(id string) {
-    log.Println("Transfer", id, "is complete")
+func (h Hooks) OnTransferComplete(t *Transfer, f File) {
+    log.Println(f.Name, "has been received")
 }
 
-SetServerConfig(ServerConfig{Handlers: Hooks{}})
-Serve()
+func (h Hooks) OnAllTransfersComplete(t *Transfer) {
+    log.Println("Transfer", t.ID, "has completed")
+}
+
+server := NewServer(ServerConfig{
+    Handlers: Hooks{},
+})
+
+server.Serve()
 ```

@@ -13,57 +13,27 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type FileOut struct {
-	File   File
-	Buffer []byte
-}
-
-func (out *FileOut) Write(b []byte) (n int, err error) {
-	out.Buffer = append(out.Buffer, b...)
-	return len(b), nil
-}
-
-type ServerHooks interface {
-	OnTransferRequest(TransferMetadata) chan bool
-	OnTransferUpdate(*Transfer)
-	OnTransfersComplete(string)
-}
-
-var upgrader = websocket.Upgrader{
-	CheckOrigin:     func(*http.Request) bool { return true }, //? Allow cross-origin requests
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
-
-type ServerConfig struct {
-	Handlers ServerHooks
-	Out      chan FileOut
-	Verbose  bool
-}
-
-var config ServerConfig
-
 func sendJSON(c *websocket.Conn, obj interface{}) {
 	msg, err := json.Marshal(obj)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	c.WriteMessage(websocket.TextMessage, msg)
 }
 
-func outputWriter(f File, datachan chan []byte) {
+func outputWriter(s *WSFTPServer, f File, datachan chan []byte) {
 	var output io.Writer
-	if config.Out == nil {
+	if s.Config.Out == nil {
 		f, err := os.Create(f.Name)
 		if err != nil {
-			log.Fatal(err)
+			panic(err)
 		}
 		defer f.Close()
 		output = f
 	} else {
 		fileoutput := &FileOut{File: f}
-		defer func() { config.Out <- *fileoutput }()
+		defer func() { s.Config.Out <- *fileoutput }()
 		output = fileoutput
 	}
 
@@ -74,7 +44,7 @@ func outputWriter(f File, datachan chan []byte) {
 		w.Write(data)
 		writtenBytes += int64(len(data))
 		if writtenBytes >= f.Size {
-			if config.Verbose {
+			if s.Config.Verbose {
 				log.Printf("--> DONE: Wrote %v to output\n", f.Name)
 			}
 			w.Flush()
@@ -83,26 +53,28 @@ func outputWriter(f File, datachan chan []byte) {
 	}
 }
 
-func Handler(w http.ResponseWriter, r *http.Request) {
+func Handler(s *WSFTPServer, w http.ResponseWriter, r *http.Request) {
 	var updateRatio = 24
-	if config.Verbose {
+	if s.Config.Verbose {
 		updateRatio = 4
 	}
 
 	conn, err := upgrader.Upgrade(w, r, nil) //? Event: onpeerconnect
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	transfer := &Transfer{
 		Data: TransferMetadata{
 			From: conn.RemoteAddr().(*net.TCPAddr).IP,
 		},
+		ID:    s.ids.Fetch(),
 		State: TransferState{Number: INITIAL},
 		conn:  conn,
 	}
 
-	eventHandler(transfer, peerConnect)
+	s.Transfers[transfer.ID] = transfer
+	eventHandler(s, transfer, peerConnect)
 
 	var updateNext int64 = 0
 
@@ -112,7 +84,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			if strings.Contains(err.Error(), "close") {
 				return
 			}
-			log.Fatal(err)
+			panic(err)
 		}
 
 		switch msgType {
@@ -122,7 +94,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			json.Unmarshal(contents, reqs)
 			transfer.Data.Files = reqs.Files
 
-			eventHandler(transfer, recvRequests)
+			eventHandler(s, transfer, recvRequests)
 		case websocket.BinaryMessage:
 			f := transfer.Data.Files[transfer.State.CurrentFile]
 
@@ -132,49 +104,50 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			transfer.State.Received += int64(len(contents))
 
 			if transfer.State.Received >= updateNext {
-				if config.Handlers != nil {
-					config.Handlers.OnTransferUpdate(transfer)
+				if s.Config.Handlers != nil {
+					s.Config.Handlers.OnTransferUpdate(transfer)
 				}
 				updateNext += updateOffset
 			}
 
 			if transfer.State.Received >= f.Size {
-				eventHandler(transfer, recvDone)
+				eventHandler(s, transfer, recvDone)
 				updateNext = 0
 			}
 		}
 	}
 }
 
-func eventHandler(t *Transfer, event Event) {
+func eventHandler(s *WSFTPServer, t *Transfer, event Event) {
 	cell, ok := EventStateMatrix[event][t.State.Number]
-	if config.Verbose {
+	if s.Config.Verbose {
 		log.Println("Event", event, "State", t.State, cell)
 	}
 
 	if !ok {
-		log.Fatal("FileTransfer: undefined state")
+		panic("Invalid FileTransfer state")
 	}
 
 	t.State.Number = cell.NewState
 	for _, action := range cell.Actions {
-		actionHandler(t, action)
+		actionHandler(s, t, action)
 	}
 }
 
-func actionHandler(t *Transfer, action Action) {
+func actionHandler(s *WSFTPServer, t *Transfer, action Action) {
 	switch action {
 	case DisplayFileRequests:
 		var accept = true
-		if config.Handlers != nil {
-			accept = <-config.Handlers.OnTransferRequest(t.Data)
+		if s.Config.Handlers != nil {
+			accept = <-s.Config.Handlers.OnTransferRequest(t)
 		}
 		if accept {
-			eventHandler(t, userAccept)
+			eventHandler(s, t, userAccept)
 			return
 		}
-		eventHandler(t, userDeny)
+		eventHandler(s, t, userDeny)
 	case IncrementFileIndex:
+		s.Config.Handlers.OnTransferComplete(t, t.Data.Files[t.State.CurrentFile])
 		t.State.CurrentFile += 1
 		t.State.Received = 0
 	case SendStartSignal:
@@ -186,28 +159,15 @@ func actionHandler(t *Transfer, action Action) {
 	case StartFileWriter:
 		f := t.Data.Files[t.State.CurrentFile]
 		t.dataChan = make(chan []byte)
-		go outputWriter(f, t.dataChan)
+		go outputWriter(s, f, t.dataChan)
 	case StopFileWriter:
 		close(t.dataChan)
 	case RecvDoneHandler:
 		if t.State.CurrentFile >= len(t.Data.Files) {
+			s.Config.Handlers.OnAllTransfersComplete(t)
 			return
 		}
-		actionHandler(t, StartFileWriter)
-		actionHandler(t, SendStartSignal)
+		actionHandler(s, t, StartFileWriter)
+		actionHandler(s, t, SendStartSignal)
 	}
-}
-
-func SetServerConfig(cfg ServerConfig) {
-	config = cfg
-}
-
-func Serve() {
-	server := http.Server{Handler: http.HandlerFunc(Handler)}
-	server.ListenAndServe()
-}
-
-func ServeWith(listener net.Listener) {
-	server := http.Server{Handler: http.HandlerFunc(Handler)}
-	server.Serve(listener)
 }

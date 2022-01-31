@@ -17,12 +17,14 @@ type TestFile struct {
 	recvdata []byte
 }
 
-type TestHooks struct{}
+type TestHooks struct {
+	choice bool
+}
 
-func (h TestHooks) OnTransferRequest(metadata TransferMetadata) chan bool {
-	log.Println("Got requests", metadata)
+func (h TestHooks) OnTransferRequest(t *Transfer) chan bool {
+	log.Println("Got requests", t.Data.Files)
 	c := make(chan bool, 1)
-	c <- true
+	c <- h.choice
 	return c
 }
 
@@ -35,8 +37,32 @@ func (h TestHooks) OnTransferUpdate(t *Transfer) {
 	)
 }
 
-func (h TestHooks) OnTransfersComplete(id string) {
-	log.Println("Transfer", id, "is complete")
+func (h TestHooks) OnTransferComplete(t *Transfer, f File) {
+	log.Println("File", f.Name, "has been transferred")
+}
+
+func (h TestHooks) OnAllTransfersComplete(t *Transfer) {
+	log.Println("Transfer", t.ID, "is complete")
+}
+
+func AssertEqualBytes(b1 []byte, b2 []byte, t *testing.T) {
+	if !bytes.Equal(b1, b2) {
+		const cutoff = 16
+
+		if len(b1) > cutoff {
+			b1 = b1[:cutoff]
+		}
+
+		if len(b2) > cutoff {
+			b2 = b2[:cutoff]
+		}
+
+		t.Errorf(
+			"Transferred result is not equivalent to source!"+
+				"\nSource: %v != Destination: %v",
+			b1, b2,
+		)
+	}
 }
 
 func RunClient(ip string, files []*TestFile) {
@@ -78,25 +104,23 @@ func RunClient(ip string, files []*TestFile) {
 	}
 }
 
-func SetupConfig() chan FileOut {
-	out := make(chan FileOut)
-	SetServerConfig(ServerConfig{
-		Out:      out,
-		Handlers: TestHooks{},
-		Verbose:  true,
-	})
-	return out
-}
-
-func RunServer(ip string, files []*TestFile) {
+func RunServer(ip string, files []*TestFile, choice bool) (*WSFTPServer, net.Listener) {
 	ln, err := net.Listen("tcp", ip)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	go ServeWith(ln)
+	out := make(chan FileOut)
+
+	server := NewServer(ServerConfig{
+		Handlers: TestHooks{choice},
+		Out:      out,
+		Verbose:  true,
+	})
+
+	go server.ServeWith(ln)
 	go func() {
-		for o := range SetupConfig() {
+		for o := range out {
 			for _, f := range files {
 				if strings.Contains(f.name, o.File.Name) {
 					f.recvdata = o.Buffer
@@ -104,17 +128,11 @@ func RunServer(ip string, files []*TestFile) {
 			}
 		}
 	}()
+
+	return server, ln
 }
 
-func TestConfiguration(t *testing.T) {
-	SetupConfig()
-}
-
-func TestDefaultServe(t *testing.T) {
-	go Serve()
-}
-
-func TestServer(t *testing.T) {
+func TestGeneric(t *testing.T) {
 	var err error
 
 	testFiles := []*TestFile{
@@ -132,43 +150,17 @@ func TestServer(t *testing.T) {
 		}
 	}
 
-	RunServer("127.0.0.1:3000", testFiles)
-
-	log.Println("Building...")
-
-	os.Chdir("client")
-	exec.Command("npm", "run", "build").Run()
-	os.Chdir("../test_client")
-	exec.Command("npm", "run", "build").Run()
-	os.Chdir("..")
-
-	log.Println("Done")
-
+	server, ln := RunServer("127.0.0.1:3000", testFiles, false)
 	RunClient("ws://127.0.0.1:3000", testFiles)
+	server.Close()
+	ln.Close()
 
-	const cutoff = 16
+	server, ln = RunServer("127.0.0.1:3000", testFiles, true)
+	RunClient("ws://127.0.0.1:3000", testFiles)
+	server.Close()
+	ln.Close()
+
 	for _, tf := range testFiles {
-		if !bytes.Equal(tf.data, tf.recvdata) {
-			var b1 []byte
-			var b2 []byte
-
-			if len(tf.data) > cutoff {
-				b1 = tf.data[:cutoff]
-			} else {
-				b1 = tf.data
-			}
-
-			if len(tf.recvdata) > cutoff {
-				b2 = tf.recvdata[:cutoff]
-			} else {
-				b2 = tf.recvdata
-			}
-
-			t.Errorf(
-				"Transferred result is not equivalent to source!"+
-					"\nSource: %v != Destination: %v",
-				b1, b2,
-			)
-		}
+		AssertEqualBytes(tf.data, tf.recvdata, t)
 	}
 }

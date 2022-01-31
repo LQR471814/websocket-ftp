@@ -4,4 +4,7 @@ package-lock.json
 
 *.js
 client/lib
-*.out
+
+# Test Coverage
+coverage.out
+coverage.html

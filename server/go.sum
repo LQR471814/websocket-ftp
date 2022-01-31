@@ -1,2 +1,4 @@
+github.com/LQR471814/go-utils v0.0.1 h1:wrdyICxqWGirFNAiL57upZGCyv5OqyRTPXmCKp1N40k=
+github.com/LQR471814/go-utils v0.0.1/go.mod h1:7OvAmNLStPDTXzevraVhkUuuC2T2jPxabe52qzVHx0c=
 github.com/gorilla/websocket v1.4.2 h1:+/TMaTYc4QFitKJxsQ7Yye35DkWvkdLcvGKqM+x0Ufc=
 github.com/gorilla/websocket v1.4.2/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=

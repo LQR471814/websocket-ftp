@@ -35,9 +35,10 @@ type TransferState struct {
 type Transfer struct {
 	Data  TransferMetadata
 	State TransferState
+	ID    uint64
 
-	dataChan chan []byte
 	conn     *websocket.Conn
+	dataChan chan []byte
 }
 
 //? Note: WriteChunk / recvfilecontents is not present here
