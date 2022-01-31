@@ -1,4 +1,4 @@
-package wsftp
+package server
 
 import (
 	"bytes"

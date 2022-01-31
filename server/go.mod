@@ -1,4 +1,4 @@
-module github.com/LQR471814/wsftp
+module github.com/LQR471814/websocket-ftp/server
 
 go 1.17
 
