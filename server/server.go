@@ -67,12 +67,12 @@ func outputWriter(f File, datachan chan []byte) {
 		output = fileoutput
 	}
 
-	writtenBytes := 0
+	var writtenBytes int64 = 0
 	w := bufio.NewWriterSize(output, 1024*1024*50) //? Buffsize = 50 mB
 
 	for data := range datachan {
 		w.Write(data)
-		writtenBytes += len(data)
+		writtenBytes += int64(len(data))
 		if writtenBytes >= f.Size {
 			if config.Verbose {
 				log.Printf("--> DONE: Wrote %v to output\n", f.Name)
@@ -104,7 +104,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 	eventHandler(transfer, peerConnect)
 
-	updateNext := 0
+	var updateNext int64 = 0
 
 	for {
 		msgType, contents, err := conn.ReadMessage()
@@ -126,10 +126,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		case websocket.BinaryMessage:
 			f := transfer.Data.Files[transfer.State.CurrentFile]
 
-			updateOffset := f.Size / updateRatio
+			updateOffset := f.Size / int64(updateRatio)
 
 			transfer.dataChan <- contents
-			transfer.State.Received += len(contents)
+			transfer.State.Received += int64(len(contents))
 
 			if transfer.State.Received >= updateNext {
 				if config.Handlers != nil {

@@ -17,7 +17,7 @@ type FileRequests struct {
 
 type File struct {
 	Name string
-	Size int
+	Size int64
 	Type string
 }
 
@@ -29,7 +29,7 @@ type TransferMetadata struct {
 type TransferState struct {
 	Number      StateID
 	CurrentFile int
-	Received    int
+	Received    int64
 }
 
 type Transfer struct {
