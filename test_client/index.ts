@@ -1,4 +1,4 @@
-import { Transfer } from '../client/src/upload'
+import { Transfer } from 'websocket-ftp'
 import { readFileSync } from 'fs'
 import { basename } from 'path'
 
