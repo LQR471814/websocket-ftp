@@ -30,7 +30,6 @@ type TransferState struct {
 	Number      StateID
 	CurrentFile int
 	Received    int
-	ID          string
 }
 
 type Transfer struct {

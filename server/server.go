@@ -10,7 +10,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
@@ -99,11 +98,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		Data: TransferMetadata{
 			From: conn.RemoteAddr().(*net.TCPAddr).IP,
 		},
-		State: TransferState{
-			Number: INITIAL,
-			ID:     uuid.New().String(),
-		},
-		conn: conn,
+		State: TransferState{Number: INITIAL},
+		conn:  conn,
 	}
 
 	eventHandler(transfer, peerConnect)
