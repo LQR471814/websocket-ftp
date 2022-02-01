@@ -1,12 +1,5 @@
 export const BUFFER_SIZE = 1024
 
-export type File = {
-	Name: string
-	Size: number
-	Type: string
-	data: Uint8Array
-}
-
 export enum Event {
 	start,
 	beginFileUpload,

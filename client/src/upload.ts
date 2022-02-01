@@ -1,10 +1,17 @@
 import { WebSocket, MessageEvent } from "isomorphic-ws"
-import { File, EventStateMatrix, Event, Action, State, BUFFER_SIZE } from "./types"
+import { EventStateMatrix, Event, Action, State, BUFFER_SIZE } from "./state"
 
 type Signals =
 | { Type: "start" }
 | { Type: "exit" }
 | { Type: "complete" }
+
+export type File = {
+	Name: string
+	Size: number
+	Type: string
+	data: Uint8Array | ArrayBuffer
+}
 
 export type Hooks = {
 	onstart?: () => void
