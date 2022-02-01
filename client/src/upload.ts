@@ -140,8 +140,8 @@ export class Transfer {
 			case Action.IncrementFileIndex:
 				this.currentFile++
 				if (!this.files[this.currentFile]) {
-					this.eventReducer(Event.exitFileUpload)
 					this.hooks?.onsuccess?.()
+					this.eventReducer(Event.exitFileUpload)
 					return
 				}
 				break

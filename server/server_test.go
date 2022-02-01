@@ -156,7 +156,8 @@ func TestGeneric(t *testing.T) {
 	ln.Close()
 
 	server, ln = RunServer("127.0.0.1:3000", testFiles, true)
-	RunClient("ws://127.0.0.1:3000", testFiles)
+	RunClient("ws://127.0.0.1:3000", testFiles[0:1])
+	RunClient("ws://127.0.0.1:3000", testFiles[1:])
 	server.Close()
 	ln.Close()
 
