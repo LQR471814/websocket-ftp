@@ -1,4 +1,4 @@
-import { WebSocket, MessageEvent } from "isomorphic-ws"
+import WebSocket, { MessageEvent } from "isomorphic-ws"
 import { EventStateMatrix, Event, Action, State, BUFFER_SIZE } from "./state"
 
 type Signals =
