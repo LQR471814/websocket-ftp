@@ -2,12 +2,12 @@ package server
 
 import (
 	"bufio"
+	"bytes"
 	"encoding/json"
 	"io"
 	"log"
 	"net"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gorilla/websocket"
@@ -22,25 +22,16 @@ func sendJSON(c *websocket.Conn, obj interface{}) {
 	c.WriteMessage(websocket.TextMessage, msg)
 }
 
-func outputWriter(s *WSFTPServer, f File, datachan chan []byte) {
-	var output io.Writer
-	if s.Config.Out == nil {
-		f, err := os.Create(f.Name)
-		if err != nil {
-			panic(err)
-		}
-		defer f.Close()
-		output = f
-	} else {
-		fileoutput := &FileOut{File: f}
-		defer func() { s.Config.Out <- *fileoutput }()
-		output = fileoutput
+func outputWriter(s *WSFTPServer, f File, t *Transfer) {
+	_, ok := t.Output[f.ID()]
+	if !ok {
+		t.Output[f.ID()] = bytes.NewBuffer(nil)
 	}
 
 	var writtenBytes int64 = 0
-	w := bufio.NewWriterSize(output, 1024*1024*50) //? Buffsize = 50 mB
+	w := bufio.NewWriterSize(t.Output[f.ID()], 1024*1024*50) //? Buffsize = 50 mB
 
-	for data := range datachan {
+	for data := range t.dataChan {
 		w.Write(data)
 		writtenBytes += int64(len(data))
 		if writtenBytes >= f.Size {
@@ -68,9 +59,10 @@ func Handler(s *WSFTPServer, w http.ResponseWriter, r *http.Request) {
 		Data: TransferMetadata{
 			From: conn.RemoteAddr().(*net.TCPAddr).IP,
 		},
-		ID:    s.ids.Fetch(),
-		State: TransferState{Number: INITIAL},
-		conn:  conn,
+		ID:     s.ids.Fetch(),
+		State:  TransferState{Number: INITIAL},
+		Output: make(map[string]io.Writer),
+		conn:   conn,
 	}
 
 	s.Transfers[transfer.ID] = transfer
@@ -89,11 +81,9 @@ func Handler(s *WSFTPServer, w http.ResponseWriter, r *http.Request) {
 
 		switch msgType {
 		case websocket.TextMessage:
-			//? This will 100% come back to bite me later but this should be fine for now
 			reqs := &FileRequests{}
 			json.Unmarshal(contents, reqs)
 			transfer.Data.Files = reqs.Files
-
 			eventHandler(s, transfer, recvRequests)
 		case websocket.BinaryMessage:
 			f := transfer.Data.Files[transfer.State.CurrentFile]
@@ -157,9 +147,9 @@ func actionHandler(s *WSFTPServer, t *Transfer, action Action) {
 	case SendFinishedSignal:
 		sendJSON(t.conn, Signal{Type: "complete"})
 	case StartFileWriter:
-		f := t.Data.Files[t.State.CurrentFile]
 		t.dataChan = make(chan []byte)
-		go outputWriter(s, f, t.dataChan)
+		f := t.Data.Files[t.State.CurrentFile]
+		go outputWriter(s, f, t)
 	case StopFileWriter:
 		close(t.dataChan)
 	case RecvDoneHandler:

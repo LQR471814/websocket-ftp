@@ -1,0 +1,16 @@
+{
+  "name": "test-stream",
+  "version": "0.1.0",
+  "description": "An interface for testing the isomorphic streams built in to websocket-ftp",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "LQR471814",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/yargs": "^17.0.10",
+    "typescript": "^4.5.5",
+    "yargs": "^17.4.1"
+  }
+}

@@ -1,16 +1,22 @@
 import WebSocket, { MessageEvent } from "isomorphic-ws"
 import { EventStateMatrix, Event, Action, State, BUFFER_SIZE } from "./state"
+import { FileStream, isFileStream } from "./stream"
+
+export * from "./stream"
 
 type Signals =
 | { Type: "start" }
 | { Type: "exit" }
 | { Type: "complete" }
 
+type Bytes = Uint8Array | ArrayBuffer
+
 export type File = {
 	Name: string
 	Size: number
 	Type: string
-	data: Uint8Array | ArrayBuffer
+
+	data: FileStream | Bytes
 }
 
 export type Hooks = {
@@ -78,11 +84,11 @@ export class Transfer {
 			)
 		)
 
-	cancel() {
+	async cancel() {
 		this.actionReducer(Action.Quit)
 	}
 
-	eventReducer(event: Event) {
+	async eventReducer(event: Event) {
 		const cell = EventStateMatrix[event][this.state]
 		if (this.verbose) {
 			console.log(`Event ${event} - State ${this.state}`)
@@ -99,7 +105,7 @@ export class Transfer {
 		}
 	}
 
-	actionReducer(action: Action) {
+	async actionReducer(action: Action) {
 		switch (action) {
 			case Action.SendFileRequest:
 				this._sendRequests()
@@ -108,31 +114,35 @@ export class Transfer {
 				const f = this.files[this.currentFile]
 				const statusUpdateOffset = f.Size / 16
 
-				let bytesRemaining = f.Size
-				let byteStart = 0
-				let updatePosition = statusUpdateOffset
+				let lastUpdatePosition = 0
+				let uploaded = 0
 
-				while (bytesRemaining > 0) {
-					this.conn.send(
-						f.data.slice(
-							byteStart,
-							byteStart + BUFFER_SIZE
-						)
-					)
+				const isStream = isFileStream(f.data)
+				while (isStream || uploaded < f.Size) {
+					let buff: Bytes | undefined
 
-					bytesRemaining -= BUFFER_SIZE
-					byteStart += BUFFER_SIZE
+					if (isStream) {
+						const b = await (f.data as FileStream).read()
+						buff = b
+					} else {
+						buff = (f.data as Bytes).slice(uploaded, uploaded+BUFFER_SIZE)
+					}
 
-					// Only update progress if current sent bytes
-					//  is larger than update frequency
-					if (this.hooks?.onprogress && byteStart > updatePosition) {
-						this.hooks.onprogress(
-							byteStart < f.Size
-								? byteStart
-								: f.Size,
-							f.Size
-						)
-						updatePosition += statusUpdateOffset
+					if (buff) {
+						this.conn.send(buff)
+						uploaded += buff.byteLength
+					}
+
+					if (uploaded - lastUpdatePosition > statusUpdateOffset) {
+						if (this.hooks?.onprogress) {
+							this.hooks.onprogress(
+								uploaded > f.Size ?
+									f.Size :
+									uploaded,
+								f.Size
+							)
+						}
+						lastUpdatePosition = uploaded
 					}
 				}
 

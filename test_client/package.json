@@ -1,6 +1,6 @@
 {
   "name": "test-websocket-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An interface for testing the websocket client",
   "main": "index.js",
   "scripts": {

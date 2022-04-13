@@ -30,6 +30,13 @@ new Transfer(
 )
 ```
 
+The client can also use a stream for the `data` attribute,
+this can be a nodeJS `fs.ReadStream` constructed from `fs.createReadStream(path)`
+or a the web `ReadableStream` from calling `File.stream()`
+
+Keep in mind, you will need to wrap each with either
+the `NodeFileStream` or `BrowserFileStream` class.
+
 ### Example (Server)
 
 ```golang

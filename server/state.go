@@ -8,16 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-type FileOut struct {
-	File   File
-	Buffer []byte
-}
-
-func (out *FileOut) Write(b []byte) (n int, err error) {
-	out.Buffer = append(out.Buffer, b...)
-	return len(b), nil
-}
-
 type ServerHooks interface {
 	OnTransferRequest(*Transfer) chan bool
 	OnTransferUpdate(*Transfer)
@@ -41,7 +31,6 @@ type WSFTPServer struct {
 
 type ServerConfig struct {
 	Handlers ServerHooks
-	Out      chan FileOut
 	Verbose  bool
 }
 

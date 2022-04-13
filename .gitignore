@@ -8,3 +8,5 @@ client/lib
 # Test Coverage
 coverage.out
 coverage.html
+
+TEST_LARGE.bin

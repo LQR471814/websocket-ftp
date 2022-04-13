@@ -2,8 +2,10 @@ package server
 
 import (
 	"bytes"
+	"crypto/rand"
 	"io/ioutil"
 	"log"
+	"math"
 	"net"
 	"os"
 	"os/exec"
@@ -18,6 +20,7 @@ type TestFile struct {
 }
 
 type TestHooks struct {
+	files  []*TestFile
 	choice bool
 }
 
@@ -38,14 +41,20 @@ func (h TestHooks) OnTransferUpdate(t *Transfer) {
 }
 
 func (h TestHooks) OnTransferComplete(t *Transfer, f File) {
-	log.Println("File", f.Name, "has been transferred")
+	log.Println("Transfer complete ->", t.Data, f)
+	for _, r := range h.files {
+		if strings.Contains(r.name, f.Name) {
+			log.Println("File", f.Name, "has been transferred")
+			r.recvdata = t.Output[f.ID()].(*bytes.Buffer).Bytes()
+		}
+	}
 }
 
 func (h TestHooks) OnAllTransfersComplete(t *Transfer) {
 	log.Println("Transfer", t.ID, "is complete")
 }
 
-func AssertEqualBytes(b1 []byte, b2 []byte, t *testing.T) {
+func AssertEqualBytes(name string, b1 []byte, b2 []byte, t *testing.T) {
 	if !bytes.Equal(b1, b2) {
 		const cutoff = 16
 
@@ -59,8 +68,8 @@ func AssertEqualBytes(b1 []byte, b2 []byte, t *testing.T) {
 
 		t.Errorf(
 			"Transferred result is not equivalent to source!"+
-				"\nSource: %v != Destination: %v",
-			b1, b2,
+				"\nFile %v Source: %v != Destination: %v",
+			name, b1, b2,
 		)
 	}
 }
@@ -110,40 +119,52 @@ func RunServer(ip string, files []*TestFile, choice bool) (*WSFTPServer, net.Lis
 		log.Fatal(err)
 	}
 
-	out := make(chan FileOut)
-
 	server := NewServer(ServerConfig{
-		Handlers: TestHooks{choice},
-		Out:      out,
+		Handlers: TestHooks{files, choice},
 		Verbose:  true,
 	})
 
 	go server.ServeWith(ln)
-	go func() {
-		for o := range out {
-			for _, f := range files {
-				if strings.Contains(f.name, o.File.Name) {
-					f.recvdata = o.Buffer
-				}
-			}
-		}
-	}()
 
 	return server, ln
 }
 
+const generatedFilename = "test_files/TEST_LARGE.bin"
+
+func GenerateLargeFile() {
+	f, err := os.Open(generatedFilename)
+	if err != nil {
+		f, err = os.Create(generatedFilename)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		buff := make([]byte, int(math.Pow(2, 27)))
+		rand.Read(buff)
+
+		_, err := f.Write(buff)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	f.Close()
+}
+
 func TestGeneric(t *testing.T) {
 	var err error
+	os.Chdir("..")
+
+	GenerateLargeFile()
 
 	testFiles := []*TestFile{
 		{name: "test_files/TEST_FILE1.txt"},
 		{name: "test_files/TEST_FILE2.jpg"},
 		{name: "test_files/TEST_FILE3.flp"},
+		{name: generatedFilename},
 	}
 
-	os.Chdir("..")
-
 	for _, tf := range testFiles {
+		tf.recvdata = make([]byte, 0)
 		tf.data, err = ioutil.ReadFile(tf.name)
 		if err != nil {
 			log.Fatal(err)
@@ -162,6 +183,6 @@ func TestGeneric(t *testing.T) {
 	ln.Close()
 
 	for _, tf := range testFiles {
-		AssertEqualBytes(tf.data, tf.recvdata, t)
+		AssertEqualBytes(tf.name, tf.data, tf.recvdata, t)
 	}
 }

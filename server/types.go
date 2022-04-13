@@ -1,7 +1,9 @@
 package server
 
 import (
+	"io"
 	"net"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -21,6 +23,10 @@ type File struct {
 	Type string
 }
 
+func (f File) ID() string {
+	return f.Name + strconv.FormatInt(f.Size, 10) + f.Type
+}
+
 type TransferMetadata struct {
 	From  net.IP
 	Files []File
@@ -33,12 +39,13 @@ type TransferState struct {
 }
 
 type Transfer struct {
-	Data  TransferMetadata
-	State TransferState
-	ID    uint64
+	Data   TransferMetadata
+	State  TransferState
+	ID     uint64
+	Output map[string]io.Writer
 
-	conn     *websocket.Conn
 	dataChan chan []byte
+	conn     *websocket.Conn
 }
 
 //? Note: WriteChunk / recvfilecontents is not present here

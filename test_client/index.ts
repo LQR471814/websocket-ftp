@@ -1,5 +1,5 @@
-import { Transfer } from 'websocket-ftp'
-import { readFileSync } from 'fs'
+import { Transfer, File, NodeFileStream } from '../client/src/upload'
+import { statSync, createReadStream } from 'fs'
 import { basename } from 'path'
 
 import yargs from 'yargs'
@@ -13,30 +13,40 @@ const argv = yargs(hideBin(process.argv)).options({
 
 console.log(`URL: ${argv.url} Files: ${argv.files}`)
 
-const t = new Transfer(
-	argv.url,
-	argv.files.map((path) => {
-		const b = readFileSync(path)
-		return {
+async function loadFiles() {
+	const files: File[] = []
+	for (const path of argv.files) {
+		const size = statSync(path).size
+		files.push({
 			Name: basename(path),
-			Size: b.length,
 			Type: "application/octet-stream",
-			data: b,
-		}
-	}),
-	{
-		onstart: () => {
-			if (argv.timeout > 0)
-				setTimeout(t.cancel, argv.timeout)
+			Size: size,
+			data: new NodeFileStream(createReadStream(path)),
+		})
+	}
+	return files
+}
+
+async function main() {
+	const t = new Transfer(
+		argv.url,
+		await loadFiles(),
+		{
+			onstart: () => {
+				if (argv.timeout > 0)
+					setTimeout(t.cancel, argv.timeout)
+			},
+			onprogress: (r, t) => console.log(`Sent ${r} / ${t} bytes`),
+			onsuccess: () => {
+				console.log("Successfully completed transfer")
+			},
+			onclose: () => {
+				console.log("Closed WS connection")
+				process.exit()
+			},
 		},
-		onprogress: (r, t) => console.log(`Sent ${r} / ${t} bytes`),
-		onsuccess: () => {
-			console.log("Successfully completed transfer")
-		},
-		onclose: () => {
-			console.log("Closed WS connection")
-			process.exit()
-		},
-	},
-	true
-)
+		true
+	)
+}
+
+main()
