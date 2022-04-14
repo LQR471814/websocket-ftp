@@ -2,7 +2,7 @@ import WebSocket, { OPEN } from "isomorphic-ws"
 import { Event, State } from "./state"
 import { WritableStream } from "../stream"
 
-type File = {
+export type File = {
     Name: string
     Size: number
     Type: string

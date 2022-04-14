@@ -6,6 +6,7 @@ export {
 
 export {
     Receiver,
+    File as ServerFile,
     Hooks as ReceiverHooks,
 } from "./receiver/receiver"
 

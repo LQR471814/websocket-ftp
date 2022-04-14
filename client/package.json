@@ -1,6 +1,6 @@
 {
   "name": "websocket-ftp",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A file transport protocol built on websockets",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
