@@ -16,7 +16,7 @@ type Signals = {
 type EventObjects =
     | { event: Event.PEER_CONNECT }
     | { event: Event.RECEIVE_REQUESTS, files: File[] }
-    | { event: Event.RECEIVE_CONTENTS, contents: Uint8Array }
+    | { event: Event.RECEIVE_CONTENTS, contents: Promise<Uint8Array> }
     | { event: Event.RECEIVE_DONE }
 
 function listenEvents(
@@ -32,20 +32,36 @@ function listenEvents(
     }
 
     conn.onmessage = (message) => {
-        if (typeof message.data === "string") {
-            const control = JSON.parse(message.data) as Signals
-            switch (control.Type) {
-                case "files":
-                    callback({
-                        event: Event.RECEIVE_REQUESTS,
-                        files: control.Files,
+        const data = message.data as any
+        switch(data.constructor.name) {
+            case "String":
+                const control = JSON.parse(data as string) as Signals
+                switch (control.Type) {
+                    case "files":
+                        callback({
+                            event: Event.RECEIVE_REQUESTS,
+                            files: control.Files,
+                        })
+                }
+                break
+            case "Blob":
+                const blob = data as Blob
+                callback({
+                    event: Event.RECEIVE_CONTENTS,
+                    contents: new Promise(r => {
+                        blob.arrayBuffer().then((value) => {
+                            r(new Uint8Array(value))
+                        })
                     })
-            }
-        } else {
-            callback({
-                event: Event.RECEIVE_CONTENTS,
-                contents: new Uint8Array(message.data as ArrayBuffer | Buffer)
-            })
+                })
+                break
+            default:
+                callback({
+                    event: Event.RECEIVE_CONTENTS,
+                    contents: new Promise(r => r(new Uint8Array(
+                        data as ArrayBuffer | Buffer
+                    )))
+                })
         }
     }
 }
@@ -64,9 +80,12 @@ export class Receiver {
     hooks: Hooks
     conn: WebSocket
 
-    constructor(conn: WebSocket, hooks: Hooks) {
+    verbose: boolean
+
+    constructor(conn: WebSocket, hooks: Hooks, verbose: boolean = false) {
         this.conn = conn
         this.hooks = hooks
+        this.verbose = verbose
         listenEvents(conn, (e) => {
             switch (e.event) {
                 case Event.PEER_CONNECT:
@@ -74,6 +93,9 @@ export class Receiver {
                         throw new Error(
                             `Invalid state ${this.state} to receive PEER_CONNECT`
                         )
+                    }
+                    if (this.verbose) {
+                        this._log("peer connected")
                     }
                     this.state = State.LISTENING_REQUESTS
                     break
@@ -85,8 +107,14 @@ export class Receiver {
                     }
                     this.state = State.WAITING_CONFIRMATION
                     this.requests = e.files
+                    if (this.verbose) {
+                        this._log("got requests", this.requests)
+                    }
                     this.hooks.onRequest(this.requests).then(
                         (choice) => {
+                            if (this.verbose) {
+                                this._log("got choice", choice)
+                            }
                             if (this.state !== State.WAITING_CONFIRMATION) {
                                 throw new Error(
                                     `Invalid state ${this.state} to receive USER_CHOICE`
@@ -99,15 +127,26 @@ export class Receiver {
                                 this.requests?.map((f, i) => {
                                     this.outputs[i] = new WritableStream(f.Size)
                                     this.outputs[i].onFinish(() => {
-                                        console.log("completed transfer", this.currentFile)
+                                        if (this.verbose) {
+                                            this._log(
+                                                "completed transfer",
+                                                this.currentFile
+                                            )
+                                        }
                                         this.currentFile!++
-                                        this.send({ Type: "complete" })
+                                        this._send({ Type: "complete" })
                                         if (this.currentFile! < this.requests!.length) {
+                                            if (this.verbose) {
+                                                this._log(
+                                                    "beginning receive for",
+                                                    this.outputs[this.currentFile!]
+                                                )
+                                            }
                                             this.hooks.onReceive?.(
                                                 this.requests![this.currentFile!],
                                                 this.outputs[this.currentFile!]
                                             )
-                                            this.send({ Type: "start" })
+                                            this._send({ Type: "start" })
                                         } else {
                                             this.state = State.INITIAL
                                             this.hooks.onTransfersComplete?.()
@@ -115,15 +154,21 @@ export class Receiver {
                                         }
                                     })
                                 })
+                                if (this.verbose) {
+                                    this._log(
+                                        "beginning receive for",
+                                        this.outputs[this.currentFile]
+                                    )
+                                }
                                 this.hooks.onReceive?.(
                                     file, this.outputs[this.currentFile]
                                 )
-                                this.send({ Type: "start" })
+                                this._send({ Type: "start" })
                                 this.state = State.RECEIVING
                                 return
                             }
                             this.state = State.INITIAL
-                            this.send({ Type: "exit" })
+                            this._send({ Type: "exit" })
                         }
                     )
                     break
@@ -133,13 +178,24 @@ export class Receiver {
                             `Invalid state ${this.state} to receive RECEIVE_CONTENTS`
                         )
                     }
-                    this.outputs[this.currentFile!].write(e.contents)
+                    //? explicit offset specification to avoid edge case
+                    //? where promise of Uint8Array resolves after another
+                    //? packet comes in
+                    const currentOffset = this.outputs[this.currentFile!].written
+                    e.contents.then((value) => {
+                        this.outputs[this.currentFile!].write(value, currentOffset)
+                        this._log("Receive contents", value.length)
+                    })
                     break
             }
         })
     }
 
-    send(signal: Object) {
+    private _send(signal: Object) {
         this.conn.send(JSON.stringify(signal))
+    }
+
+    private _log(message: string, ...args: any[]) {
+        console.info(`[Receiving] ${message}`, ...args)
     }
 }

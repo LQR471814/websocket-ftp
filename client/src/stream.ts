@@ -55,7 +55,6 @@ export class BrowserFileStream implements FileStream {
       if (result.done) {
         this.closed = true;
       }
-      console.log("read", result)
       return result.value;
     }
   }
@@ -63,7 +62,7 @@ export class BrowserFileStream implements FileStream {
 export class WritableStream {
     buffer: Uint8Array
     total: number
-    private written: number = 0
+    written: number = 0
     private onFinishListeners: ((buffer: Uint8Array) => void)[] = []
 
     constructor(size: number) {
@@ -71,12 +70,12 @@ export class WritableStream {
         this.buffer = new Uint8Array(new ArrayBuffer(size))
     }
 
-    write(bytes: Uint8Array): boolean {
+    write(bytes: Uint8Array, offset?: number): boolean {
         if (this.written + bytes.length > this.total) {
             return false
         }
 
-        this.buffer.set(bytes, this.written)
+        this.buffer.set(bytes, offset ?? this.written)
         this.written += bytes.byteLength
 
         if (this.written >= this.total) {

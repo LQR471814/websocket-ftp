@@ -82,6 +82,10 @@ export class Transfer {
 			)
 		)
 
+	private _log(message: string, ...args: any[]) {
+		console.info(`[Client] ${message}`, ...args)
+	}
+
 	async cancel() {
 		this.actionReducer(Action.Quit)
 	}
@@ -89,7 +93,7 @@ export class Transfer {
 	async eventReducer(event: Event) {
 		const cell = EventStateMatrix[event][this.state]
 		if (this.verbose) {
-			console.log(`Event ${event} - State ${this.state}`)
+			this._log(`event ${event} - state ${this.state}`)
 		}
 
 		if (!cell) {
@@ -128,6 +132,9 @@ export class Transfer {
 					if (buff) {
 						this.conn.send(buff)
 						uploaded += buff.byteLength
+						if (this.verbose) {
+							this._log(`sent ${uploaded} / ${f.Size}`)
+						}
 					}
 
 					if (uploaded - lastUpdatePosition > statusUpdateOffset) {
