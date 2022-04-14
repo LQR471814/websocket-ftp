@@ -1,7 +1,7 @@
 {
-  "name": "test-websocket-client",
-  "version": "0.1.2",
-  "description": "An interface for testing the websocket client",
+  "name": "test-receiver",
+  "version": "0.1.0",
+  "description": "A script to test receiving files with the typescript client",
   "main": "index.js",
   "scripts": {
     "build": "tsc"
@@ -14,6 +14,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
+    "isomorphic-ws": "^4.0.1",
     "websocket-ftp": "file:../client",
     "yargs": "^17.3.1"
   }

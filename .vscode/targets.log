@@ -1,0 +1,343 @@
+make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
+# GNU Make 4.3
+# Built for Windows32
+# Copyright (C) 1988-2020 Free Software Foundation, Inc.
+# License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+# This is free software: you are free to change and redistribute it.
+# There is NO WARRANTY, to the extent permitted by law.
+
+# Make data base, printed on Wed Apr 13 12:28:22 2022
+
+# Variables
+
+# environment
+FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
+# environment
+SYSTEMDRIVE = C:
+# environment
+LC_ALL = C
+# environment
+VBOX_HWVIRTEX_IGNORE_SVM_IN_USE = 1
+# environment
+USERPROFILE = C:\Users\bramb
+# environment
+LOCALAPPDATA = C:\Users\bramb\AppData\Local
+# environment
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-7f9dc61f-3966-4656-99b9-c8fcbc15d88c-sock
+# environment
+VSCODE_CWD = C:\WINDOWS\System32
+# environment
+CHOCOLATEYINSTALL = C:\ProgramData\chocolatey
+# environment
+SYSTEMROOT = C:\WINDOWS
+# environment
+PROCESSOR_LEVEL = 23
+# environment
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+# default
+MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
+# environment
+GOPATH = C:\Users\bramb\Documents\Codes\Go
+# automatic
+@D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
+# environment
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_16112_SABLHRLNRIMGCTKV
+# environment
+FPS_BROWSER_USER_PROFILE_STRING = Default
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# default
+.VARIABLES := 
+# automatic
+%D = $(patsubst %/,%,$(patsubst %\,%,$(dir $%)))
+# makefile (from 'makefile', line 2)
+TEST_FILES = $(addprefix $(TEST_FILE_DIR),TEST_FILE1.txt TEST_FILE2.jpg TEST_FILE3.flp TEST_LARGE.bin)
+# automatic
+^D = $(patsubst %/,%,$(patsubst %\,%,$(dir $^)))
+# environment
+VSCODE_LOG_STACK = false
+# automatic
+%F = $(notdir $%)
+# environment
+VSCODE_CODE_CACHE_PATH = C:\Users\bramb\AppData\Roaming\Code\CachedData\dfd34e8260c270da74b5c2d86d61aee4b6d56977
+# environment
+LANG = C
+# default
+.LOADED := 
+# environment
+TMP = C:\Users\bramb\AppData\Local\Temp
+# default
+.INCLUDE_DIRS = .
+# environment
+PROCESSOR_ARCHITEW6432 = AMD64
+# makefile
+MAKEFLAGS = pqrR
+# environment
+ONEDRIVE = C:\Users\bramb\OneDrive
+# makefile
+CURDIR := c:/Users/bramb/Documents/Codes/Go/src/websocket-ftp
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# automatic
+*D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
+# environment
+PROGRAMFILES = C:\Program Files (x86)
+# environment
+MFLAGS = -pqrR
+# default
+.SHELLFLAGS := -c
+# environment
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# automatic
++D = $(patsubst %/,%,$(patsubst %\,%,$(dir $+)))
+# environment
+P2 = D:\flutter\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\protoc-3.17.3-win64\bin;C:\Program Files\NVIDIA\CUDNN\v8.3\bin;D:\zlib123dllx64\dll_x64;D:\PostgreSQL\14\bin;
+# makefile (from 'makefile', line 1)
+MAKEFILE_LIST := makefile
+# automatic
+@F = $(notdir $@)
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+VSCODE_PID = 16112
+# environment
+CUDA_PATH = D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6
+# automatic
+?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
+# automatic
+*F = $(notdir $*)
+# automatic
+<D = $(patsubst %/,%,$(patsubst %\,%,$(dir $<)))
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+ONEDRIVECONSUMER = C:\Users\bramb\OneDrive
+# default
+MAKE_HOST := Windows32
+# environment
+ANDROID_HOME = C:\Users\bramb\AppData\Local\Android\Sdk
+# environment
+PROGRAMDATA = C:\ProgramData
+# default
+SHELL := sh.exe
+# environment
+HOMEPATH = \Users\bramb
+# default
+MAKECMDGOALS := all
+# environment
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# environment
+COMSPEC = C:\WINDOWS\system32\cmd.exe
+# environment
+WINDIR = C:\WINDOWS
+# environment
+MAKELEVEL := 0
+# default
+MAKE = $(MAKE_COMMAND)
+# environment
+PATH = C:\Program Files\GitHub CLI\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Users\bramb\bin;C:\Program Files\wget\;C:\Program Files\dotnet\;C:\WINDOWS\system32;C:\Program Files\handle64;C:\Windows\System32\OpenSSH\;C:\Program Files\curl-7.74.0_2\bin\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Alacritty\;C:\Users\bramb\AppData\Local\Pub\Cache\bin;D:\Programs\mingw\mingw64\bin;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;D:\libxml2-x86_64\bin;C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.275-1\bin;C:\Program Files (x86)\GnuPG\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\extras\CUPTI\lib64;C:\Program Files (x86)\Intel\iCLS Client\;C:\WINDOWS\System32\OpenSSH\;C:\Windows;C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.275-1\jre\bin;D:\nodejs\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\GitHub CLI\;C:\Program Files\Alacritty\;D:\libxml2-x86_64\bin;D:\Go\bin;C:\Program Files\Git\cmd;;D:\ffmpeg\bin;C:\Program Files (x86)\chromedriver;C:\Program Files\Intel\iCLS Client\;C:\Python39\;C:\Users\bramb\AppData\Local\Programs\Python\Python39\Scripts;C:\sqlite\;C:\Program Files (x86)\Google\Chrome\Application;D:\Go\bin;C:\Python39\Scripts\;D:\Eclipse Adoptium\jdk-17.0.1.12-hotspot\bin;D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\koid\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Cloc\;C:\Windows\System32\wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\Wbem;D:\gnuplot\bin;D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6\libnvvp;D:\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\bin\Hostx64\x64;C:\WINDOWS;C:\TDM-GCC-64\bin;D:\Programs\mingw\mingw64\x86_64-w64-mingw32\bin;C:\Program Files\Microsoft Network Monitor 3\;C:\Windows\System32;C:\Users\bramb\Documents\Codes\Go\bin;D:\flutter\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\protoc-3.17.3-win64\bin;C:\Program Files\NVIDIA\CUDNN\v8.3\bin;D:\zlib123dllx64\dll_x64;D:\PostgreSQL\14\bin;;D:\Yarn\bin\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\bin\\..\extras\CUPTI\lib64;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\libnvvp;C:\Python39\Scripts\;C:\Python39\;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Program Files (x86)\NetSarang\Xshell 6\;C:\Windows\System32;C:\Windows;C:\Windows\System32\wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\GnuPG\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;C:\TDM-GCC-64\bin;C:\WINDOWS\system32;C;C:\Users\bramb\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\bramb\AppData\Roaming\npm;C:\Users\bramb\go\bin;C:\Users\bramb\AppData\Local\Yarn\bin
+# environment
+COMPUTERNAME = DESKTOP-E7L9LC1
+# default
+MAKEFILES := 
+# automatic
+^F = $(notdir $^)
+# environment
+PROMPT = $P$G
+# environment
+CHOCOLATEYLASTPATHUPDATE = 132377472039249210
+# environment
+NVTOOLSEXT_PATH = C:\Program Files\NVIDIA Corporation\NvToolsExt\
+# environment
+LOGONSERVER = \\DESKTOP-E7L9LC1
+# environment
+VSCODE_LOG_NATIVE = false
+# environment
+USERNAME = bramb
+# environment
+COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
+# automatic
+?F = $(notdir $?)
+# environment
+PROGRAMW6432 = C:\Program Files
+# environment
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+# automatic
++F = $(notdir $+)
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+PLATFORM-TOOLS = C:\Users\bramb\AppData\Local\Android\Sdk\platform-tools\
+# environment
+USERDOMAIN = DESKTOP-E7L9LC1
+# 'override' directive
+GNUMAKEFLAGS := 
+# environment
+OS = Windows_NT
+# environment
+__COMPAT_LAYER = DetectorsAppHealth
+# environment
+CUDA_PATH_V11_6 = D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6
+# makefile
+.DEFAULT_GOAL := build-client
+# default
+MAKE_VERSION := 4.3
+# environment
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# environment
+USERDOMAIN_ROAMINGPROFILE = DESKTOP-E7L9LC1
+# environment
+NUMBER_OF_PROCESSORS = 12
+# environment
+PUBLIC = C:\Users\Public
+# environment
+APPDATA = C:\Users\bramb\AppData\Roaming
+# environment
+HOMEDRIVE = C:
+# makefile (from 'makefile', line 1)
+TEST_FILE_DIR = test_files/
+# environment
+PROCESSOR_ARCHITECTURE = x86
+# environment
+GOMODCACHE = C:\Users\bramb\Documents\Codes\Go\pkg\mod
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# environment
+TEMP = C:\Users\bramb\AppData\Local\Temp
+# environment
+VSCODE_IPC_HOOK = \\.\pipe\c6f36c2d26c8f4e05244d334cd263e8d-1.66.2-main-sock
+# environment
+GOPROXY = https://proxy.golang.org,direct
+# default
+.RECIPEPREFIX := 
+# automatic
+<F = $(notdir $<)
+# default
+SUFFIXES := 
+# environment
+ALLUSERSPROFILE = C:\ProgramData
+# environment
+SESSIONNAME = Console
+# default
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync load
+# environment
+PROCESSOR_REVISION = 7100
+# environment
+PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
+# variable set hash-table stats:
+# Load=110/1024=11%, Rehash=0, Collisions=12/142=8%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# . (key c:/Users/bramb/Documents/Codes/Go/src/websocket-ftp, mtime 1649878101): 14 files, no impossibilities.
+
+# 14 files, no impossibilities in 1 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+# Not a target:
+test_files/TEST_FILE3.flp:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+test_files/TEST_FILE2.jpg:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+test-stream: build-client test_files/TEST_FILE1.txt test_files/TEST_FILE2.jpg test_files/TEST_FILE3.flp test_files/TEST_LARGE.bin
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 16):
+	cd test_stream && \
+		npm run build
+	node test_stream/index.js --files $(TEST_FILES)
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+test_files/TEST_LARGE.bin:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+all:
+#  Command line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+
+build-client:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 5):
+	cd client && \
+		npm run build
+
+test: build-client test_files/TEST_FILE1.txt test_files/TEST_FILE2.jpg test_files/TEST_FILE3.flp test_files/TEST_LARGE.bin
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 9):
+	cd test_client && \
+		npm run build
+	cd server && \
+		go test -coverprofile="coverage.out" && \
+		go tool cover -html=coverage.out -o coverage.html \
+
+
+# Not a target:
+test_files/TEST_FILE1.txt:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+makefile:
+#  Implicit rule search has been done.
+#  Last modified 2022-04-13 10:44:12
+#  File has been updated.
+#  Successfully updated.
+
+# files hash-table stats:
+# Load=11/1024=1%, Rehash=0, Collisions=0/31=0%
+# VPATH Search Paths
+
+# No 'vpath' search paths.
+
+# No general ('VPATH' variable) search path.
+
+# strcache buffers: 1 (0) / strings = 24 / storage = 285 B / avg = 11 B
+# current buf: size = 8174 B / used = 285 B / count = 24 / avg = 11 B
+
+# strcache performance: lookups = 37 / hit rate = 35%
+# hash-table stats:
+# Load=24/8192=0%, Rehash=0, Collisions=0/37=0%
+# Finished Make data base on Wed Apr 13 12:28:22 2022
+
+ 

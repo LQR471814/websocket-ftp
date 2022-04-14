@@ -1,4 +1,4 @@
-import { NodeFileStream } from '../client/src/upload'
+import { NodeFileStream } from '../client/src/stream'
 import { statSync, createReadStream } from "fs"
 
 import yargs from 'yargs'

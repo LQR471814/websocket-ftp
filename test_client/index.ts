@@ -1,4 +1,5 @@
-import { Transfer, File, NodeFileStream } from '../client/src/upload'
+import { Transfer, File } from '../client/src/client/client'
+import { NodeFileStream } from '../client/src/stream'
 import { statSync, createReadStream } from 'fs'
 import { basename } from 'path'
 

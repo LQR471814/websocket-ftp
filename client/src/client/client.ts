@@ -1,8 +1,6 @@
 import WebSocket, { MessageEvent } from "isomorphic-ws"
 import { EventStateMatrix, Event, Action, State, BUFFER_SIZE } from "./state"
-import { FileStream, isFileStream } from "./stream"
-
-export * from "./stream"
+import { FileStream, isFileStream } from "../stream"
 
 type Signals =
 | { Type: "start" }
@@ -99,7 +97,6 @@ export class Transfer {
 		}
 
 		this.state = cell.newState
-
 		for (const action of cell.actions) {
 			this.actionReducer(action)
 		}
