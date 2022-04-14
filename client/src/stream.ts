@@ -39,23 +39,26 @@ export class NodeFileStream implements FileStream {
 }
 
 export class BrowserFileStream implements FileStream {
-    closed: boolean
-    private stream: ReadableStream<Uint8Array>
+    closed: boolean;
+    private stream: ReadableStreamDefaultReader<Uint8Array>;
 
     constructor(file: BrowserFile) {
-        this.closed = false
-        this.stream = file.stream()
-        this.stream.getReader().closed.then(() => { closed = true })
+      this.closed = false;
+      this.stream = file.stream().getReader();
+      this.stream.closed.then(() => {
+        this.closed = true;
+      });
     }
 
     async read(): Promise<Uint8Array | undefined> {
-        const result = await this.stream.getReader().read()
-        if (result.done) {
-            closed = true
-        }
-        return result.value
+      const result = await this.stream.read();
+      if (result.done) {
+        this.closed = true;
+      }
+      console.log("read", result)
+      return result.value;
     }
-}
+  }
 
 export class WritableStream {
     buffer: Uint8Array

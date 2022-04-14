@@ -115,11 +115,14 @@ export class Transfer {
 				let uploaded = 0
 
 				const isStream = isFileStream(f.data)
-				while (isStream || uploaded < f.Size) {
+				while (uploaded < f.Size) {
 					let buff: Bytes | undefined
 
 					if (isStream) {
 						const b = await (f.data as FileStream).read()
+						if ((f.data as FileStream).closed) {
+							throw new Error(`Stream was closed before all data was sent ${uploaded} < ${f.Size}`)
+						}
 						buff = b
 					} else {
 						buff = (f.data as Bytes).slice(uploaded, uploaded+BUFFER_SIZE)

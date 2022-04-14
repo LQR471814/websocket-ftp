@@ -1,6 +1,5 @@
 make.exe --dry-run --always-make --keep-going --print-directory
 make: Entering directory 'c:/Users/bramb/Documents/Codes/Go/src/websocket-ftp'
-cd client && \
-	npm run build
+cd client && npm run build
 make: Leaving directory 'c:/Users/bramb/Documents/Codes/Go/src/websocket-ftp'
  

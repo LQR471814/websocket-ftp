@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Apr 13 12:28:22 2022
+# Make data base, printed on Thu Apr 14 10:03:15 2022
 
 # Variables
 
@@ -25,9 +25,9 @@ USERPROFILE = C:\Users\bramb
 # environment
 LOCALAPPDATA = C:\Users\bramb\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-7f9dc61f-3966-4656-99b9-c8fcbc15d88c-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-44918f11-f3c6-4a13-9057-8fe33e7ea9fa-sock
 # environment
-VSCODE_CWD = C:\WINDOWS\System32
+VSCODE_CWD = C:\Users\bramb\AppData\Local\Programs\Microsoft VS Code
 # environment
 CHOCOLATEYINSTALL = C:\ProgramData\chocolatey
 # environment
@@ -43,7 +43,7 @@ GOPATH = C:\Users\bramb\Documents\Codes\Go
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_16112_SABLHRLNRIMGCTKV
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_17644_RMQBHYLANQMOITQF
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -81,7 +81,7 @@ CURDIR := c:/Users/bramb/Documents/Codes/Go/src/websocket-ftp
 # environment
 VSCODE_PIPE_LOGGING = true
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
 # automatic
 *D = $(patsubst %/,%,$(patsubst %\,%,$(dir $*)))
 # environment
@@ -103,7 +103,7 @@ MAKEFILE_LIST := makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 16112
+VSCODE_PID = 17644
 # environment
 CUDA_PATH = D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6
 # automatic
@@ -139,7 +139,7 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = C:\Program Files\GitHub CLI\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Users\bramb\bin;C:\Program Files\wget\;C:\Program Files\dotnet\;C:\WINDOWS\system32;C:\Program Files\handle64;C:\Windows\System32\OpenSSH\;C:\Program Files\curl-7.74.0_2\bin\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Alacritty\;C:\Users\bramb\AppData\Local\Pub\Cache\bin;D:\Programs\mingw\mingw64\bin;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;D:\libxml2-x86_64\bin;C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.275-1\bin;C:\Program Files (x86)\GnuPG\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\extras\CUPTI\lib64;C:\Program Files (x86)\Intel\iCLS Client\;C:\WINDOWS\System32\OpenSSH\;C:\Windows;C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.275-1\jre\bin;D:\nodejs\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\GitHub CLI\;C:\Program Files\Alacritty\;D:\libxml2-x86_64\bin;D:\Go\bin;C:\Program Files\Git\cmd;;D:\ffmpeg\bin;C:\Program Files (x86)\chromedriver;C:\Program Files\Intel\iCLS Client\;C:\Python39\;C:\Users\bramb\AppData\Local\Programs\Python\Python39\Scripts;C:\sqlite\;C:\Program Files (x86)\Google\Chrome\Application;D:\Go\bin;C:\Python39\Scripts\;D:\Eclipse Adoptium\jdk-17.0.1.12-hotspot\bin;D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\koid\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Cloc\;C:\Windows\System32\wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\Wbem;D:\gnuplot\bin;D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6\libnvvp;D:\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\bin\Hostx64\x64;C:\WINDOWS;C:\TDM-GCC-64\bin;D:\Programs\mingw\mingw64\x86_64-w64-mingw32\bin;C:\Program Files\Microsoft Network Monitor 3\;C:\Windows\System32;C:\Users\bramb\Documents\Codes\Go\bin;D:\flutter\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\protoc-3.17.3-win64\bin;C:\Program Files\NVIDIA\CUDNN\v8.3\bin;D:\zlib123dllx64\dll_x64;D:\PostgreSQL\14\bin;;D:\Yarn\bin\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\bin\\..\extras\CUPTI\lib64;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\libnvvp;C:\Python39\Scripts\;C:\Python39\;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Program Files (x86)\NetSarang\Xshell 6\;C:\Windows\System32;C:\Windows;C:\Windows\System32\wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\GnuPG\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;C:\TDM-GCC-64\bin;C:\WINDOWS\system32;C;C:\Users\bramb\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\bramb\AppData\Roaming\npm;C:\Users\bramb\go\bin;C:\Users\bramb\AppData\Local\Yarn\bin
+PATH = C:\Program Files\GitHub CLI\;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Users\bramb\bin;C:\Program Files\wget\;C:\Program Files\dotnet\;C:\WINDOWS\system32;C:\Program Files\handle64;C:\Windows\System32\OpenSSH\;C:\Program Files\curl-7.74.0_2\bin\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files\Alacritty\;C:\Users\bramb\AppData\Local\Pub\Cache\bin;D:\Programs\mingw\mingw64\bin;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;D:\libxml2-x86_64\bin;C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.275-1\bin;C:\Program Files (x86)\GnuPG\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\extras\CUPTI\lib64;C:\Program Files (x86)\Intel\iCLS Client\;C:\WINDOWS\System32\OpenSSH\;C:\Windows;C:\Program Files\RedHat\java-1.8.0-openjdk-1.8.0.275-1\jre\bin;D:\nodejs\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\GitHub CLI\;C:\Program Files\Alacritty\;D:\libxml2-x86_64\bin;C:\Program Files\Git\cmd;;D:\ffmpeg\bin;C:\Program Files (x86)\chromedriver;C:\Program Files\Intel\iCLS Client\;C:\Python39\;C:\Users\bramb\AppData\Local\Programs\Python\Python39\Scripts;C:\sqlite\;C:\Program Files (x86)\Google\Chrome\Application;D:\Go\bin;C:\Python39\Scripts\;D:\Eclipse Adoptium\jdk-17.0.1.12-hotspot\bin;D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\koid\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Cloc\;C:\Windows\System32\wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\Wbem;D:\gnuplot\bin;D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6\libnvvp;D:\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\bin\Hostx64\x64;C:\WINDOWS;C:\TDM-GCC-64\bin;D:\Programs\mingw\mingw64\x86_64-w64-mingw32\bin;C:\Program Files\Microsoft Network Monitor 3\;C:\Windows\System32;C:\Users\bramb\Documents\Codes\Go\bin;D:\flutter\bin;C:\ProgramData\chocolatey\bin;C:\Program Files\protoc-3.17.3-win64\bin;C:\Program Files\NVIDIA\CUDNN\v8.3\bin;D:\zlib123dllx64\dll_x64;D:\PostgreSQL\14\bin;;D:\Yarn\bin\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\bin\\..\extras\CUPTI\lib64;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.4\libnvvp;C:\Python39\Scripts\;C:\Python39\;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Program Files (x86)\NetSarang\Xshell 6\;C:\Windows\System32;C:\Windows;C:\Windows\System32\wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\GnuPG\bin;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\dotnet\;C:\TDM-GCC-64\bin;C:\WINDOWS\system32;C;C:\Users\bramb\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\bramb\AppData\Roaming\npm;C:\Users\bramb\AppData\Local\Yarn\bin;C:\Users\bramb\go\bin
 # environment
 COMPUTERNAME = DESKTOP-E7L9LC1
 # default
@@ -178,8 +178,6 @@ USERDOMAIN = DESKTOP-E7L9LC1
 GNUMAKEFLAGS := 
 # environment
 OS = Windows_NT
-# environment
-__COMPAT_LAYER = DetectorsAppHealth
 # environment
 CUDA_PATH_V11_6 = D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6
 # makefile
@@ -233,7 +231,7 @@ PROCESSOR_REVISION = 7100
 # environment
 PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 # variable set hash-table stats:
-# Load=110/1024=11%, Rehash=0, Collisions=12/142=8%
+# Load=109/1024=11%, Rehash=0, Collisions=12/143=8%
 
 # Pattern-specific Variable Values
 
@@ -241,9 +239,9 @@ PROCESSOR_IDENTIFIER = AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD
 
 # Directories
 
-# . (key c:/Users/bramb/Documents/Codes/Go/src/websocket-ftp, mtime 1649878101): 14 files, no impossibilities.
+# . (key c:/Users/bramb/Documents/Codes/Go/src/websocket-ftp, mtime 1649898199): 15 files, no impossibilities.
 
-# 14 files, no impossibilities in 1 directories.
+# 15 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -257,6 +255,16 @@ test_files/TEST_FILE3.flp:
 #  Modification time never checked.
 #  File has not been updated.
 
+test-receive: build-client test_files/TEST_FILE1.txt test_files/TEST_FILE2.jpg test_files/TEST_FILE3.flp test_files/TEST_LARGE.bin
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'makefile', line 18):
+	cd test_receiver && npm run build
+	cd test_client && npm run build
+	cd test_receiver/test_server && \
+		go run main.go
+
 # Not a target:
 test_files/TEST_FILE2.jpg:
 #  Implicit rule search has not been done.
@@ -267,9 +275,8 @@ test-stream: build-client test_files/TEST_FILE1.txt test_files/TEST_FILE2.jpg te
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 16):
-	cd test_stream && \
-		npm run build
+#  recipe to execute (from 'makefile', line 14):
+	cd test_stream && npm run build
 	node test_stream/index.js --files $(TEST_FILES)
 
 # Not a target:
@@ -296,16 +303,14 @@ build-client:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'makefile', line 5):
-	cd client && \
-		npm run build
+	cd client && npm run build
 
 test: build-client test_files/TEST_FILE1.txt test_files/TEST_FILE2.jpg test_files/TEST_FILE3.flp test_files/TEST_LARGE.bin
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
-#  recipe to execute (from 'makefile', line 9):
-	cd test_client && \
-		npm run build
+#  recipe to execute (from 'makefile', line 8):
+	cd test_client && npm run build
 	cd server && \
 		go test -coverprofile="coverage.out" && \
 		go tool cover -html=coverage.out -o coverage.html \
@@ -320,24 +325,24 @@ test_files/TEST_FILE1.txt:
 # Not a target:
 makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-04-13 10:44:12
+#  Last modified 2022-04-13 18:03:31
 #  File has been updated.
 #  Successfully updated.
 
 # files hash-table stats:
-# Load=11/1024=1%, Rehash=0, Collisions=0/31=0%
+# Load=12/1024=1%, Rehash=0, Collisions=0/37=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 24 / storage = 285 B / avg = 11 B
-# current buf: size = 8174 B / used = 285 B / count = 24 / avg = 11 B
+# strcache buffers: 1 (0) / strings = 26 / storage = 312 B / avg = 12 B
+# current buf: size = 8174 B / used = 312 B / count = 26 / avg = 12 B
 
-# strcache performance: lookups = 37 / hit rate = 35%
+# strcache performance: lookups = 45 / hit rate = 42%
 # hash-table stats:
-# Load=24/8192=0%, Rehash=0, Collisions=0/37=0%
-# Finished Make data base on Wed Apr 13 12:28:22 2022
+# Load=26/8192=0%, Rehash=0, Collisions=0/45=0%
+# Finished Make data base on Thu Apr 14 10:03:15 2022
 
  
