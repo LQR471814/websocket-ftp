@@ -83,7 +83,9 @@ export class Transfer {
 		)
 
 	private _log(message: string, ...args: any[]) {
-		console.info(`[Client] ${message}`, ...args)
+		if (this.verbose) {
+			console.info(`[Client] ${message}`, ...args)
+		}
 	}
 
 	async cancel() {
@@ -92,9 +94,7 @@ export class Transfer {
 
 	async eventReducer(event: Event) {
 		const cell = EventStateMatrix[event][this.state]
-		if (this.verbose) {
-			this._log(`event ${event} - state ${this.state}`)
-		}
+		this._log(`event ${event} - state ${this.state}`)
 
 		if (!cell) {
 			throw new Error(`Undefined cell ${event} ${this.state}`)
@@ -132,9 +132,7 @@ export class Transfer {
 					if (buff) {
 						this.conn.send(buff)
 						uploaded += buff.byteLength
-						if (this.verbose) {
-							this._log(`sent ${uploaded} / ${f.Size}`)
-						}
+						this._log(`sent ${uploaded} / ${f.Size}`)
 					}
 
 					if (uploaded - lastUpdatePosition > statusUpdateOffset) {

@@ -70,22 +70,37 @@ export class WritableStream {
         this.buffer = new Uint8Array(new ArrayBuffer(size))
     }
 
-    write(bytes: Uint8Array, offset?: number): boolean {
+    write(bytes: Uint8Array) {
         if (this.written + bytes.length > this.total) {
-            return false
+            return
         }
 
-        this.buffer.set(bytes, offset ?? this.written)
+        this.buffer.set(bytes, this.written)
         this.written += bytes.byteLength
 
         if (this.written >= this.total) {
             for (const callback of this.onFinishListeners) {
                 callback(this.buffer)
             }
-            return false
+        }
+    }
+
+    writeAsync(bytes: Promise<Uint8Array>, length: number) {
+        if (this.written + length > this.total) {
+            return
         }
 
-        return true
+        const offset = this.written
+        this.written += length
+
+        bytes.then(data => {
+            this.buffer.set(data, offset)
+            if (this.written >= this.total) {
+                for (const callback of this.onFinishListeners) {
+                    callback(this.buffer)
+                }
+            }
+        })
     }
 
     onFinish(callback: (buffer: Uint8Array) => void) {

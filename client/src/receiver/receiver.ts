@@ -16,7 +16,7 @@ type Signals = {
 type EventObjects =
     | { event: Event.PEER_CONNECT }
     | { event: Event.RECEIVE_REQUESTS, files: File[] }
-    | { event: Event.RECEIVE_CONTENTS, contents: Promise<Uint8Array> }
+    | { event: Event.RECEIVE_CONTENTS, contents: Promise<Uint8Array>, length: number }
     | { event: Event.RECEIVE_DONE }
 
 function listenEvents(
@@ -52,15 +52,16 @@ function listenEvents(
                         blob.arrayBuffer().then((value) => {
                             r(new Uint8Array(value))
                         })
-                    })
+                    }),
+                    length: blob.size,
                 })
                 break
             default:
+                const array = new Uint8Array(data as ArrayBuffer | Buffer)
                 callback({
                     event: Event.RECEIVE_CONTENTS,
-                    contents: new Promise(r => r(new Uint8Array(
-                        data as ArrayBuffer | Buffer
-                    )))
+                    contents: new Promise(r => r(array)),
+                    length: array.byteLength
                 })
         }
     }
@@ -94,9 +95,7 @@ export class Receiver {
                             `Invalid state ${this.state} to receive PEER_CONNECT`
                         )
                     }
-                    if (this.verbose) {
-                        this._log("peer connected")
-                    }
+                    this._log("peer connected")
                     this.state = State.LISTENING_REQUESTS
                     break
                 case Event.RECEIVE_REQUESTS:
@@ -107,14 +106,10 @@ export class Receiver {
                     }
                     this.state = State.WAITING_CONFIRMATION
                     this.requests = e.files
-                    if (this.verbose) {
-                        this._log("got requests", this.requests)
-                    }
+                    this._log("got requests", this.requests)
                     this.hooks.onRequest(this.requests).then(
                         (choice) => {
-                            if (this.verbose) {
-                                this._log("got choice", choice)
-                            }
+                            this._log("got choice", choice)
                             if (this.state !== State.WAITING_CONFIRMATION) {
                                 throw new Error(
                                     `Invalid state ${this.state} to receive USER_CHOICE`
@@ -127,21 +122,17 @@ export class Receiver {
                                 this.requests?.map((f, i) => {
                                     this.outputs[i] = new WritableStream(f.Size)
                                     this.outputs[i].onFinish(() => {
-                                        if (this.verbose) {
-                                            this._log(
-                                                "completed transfer",
-                                                this.currentFile
-                                            )
-                                        }
+                                        this._log(
+                                            "completed transfer",
+                                            this.currentFile
+                                        )
                                         this.currentFile!++
                                         this._send({ Type: "complete" })
                                         if (this.currentFile! < this.requests!.length) {
-                                            if (this.verbose) {
-                                                this._log(
-                                                    "beginning receive for",
-                                                    this.outputs[this.currentFile!]
-                                                )
-                                            }
+                                            this._log(
+                                                "beginning receive for",
+                                                this.outputs[this.currentFile!]
+                                            )
                                             this.hooks.onReceive?.(
                                                 this.requests![this.currentFile!],
                                                 this.outputs[this.currentFile!]
@@ -154,12 +145,10 @@ export class Receiver {
                                         }
                                     })
                                 })
-                                if (this.verbose) {
-                                    this._log(
-                                        "beginning receive for",
-                                        this.outputs[this.currentFile]
-                                    )
-                                }
+                                this._log(
+                                    "beginning receive for",
+                                    this.outputs[this.currentFile]
+                                )
                                 this.hooks.onReceive?.(
                                     file, this.outputs[this.currentFile]
                                 )
@@ -181,11 +170,8 @@ export class Receiver {
                     //? explicit offset specification to avoid edge case
                     //? where promise of Uint8Array resolves after another
                     //? packet comes in
-                    const currentOffset = this.outputs[this.currentFile!].written
-                    e.contents.then((value) => {
-                        this.outputs[this.currentFile!].write(value, currentOffset)
-                        this._log("Receive contents", value.length)
-                    })
+                    this.outputs[this.currentFile!].writeAsync(e.contents, e.length)
+                    this._log("Receive contents", e.length)
                     break
             }
         })
@@ -196,6 +182,8 @@ export class Receiver {
     }
 
     private _log(message: string, ...args: any[]) {
-        console.info(`[Receiving] ${message}`, ...args)
+        if (this.verbose) {
+            console.info(`[Receiving] ${message}`, ...args)
+        }
     }
 }
