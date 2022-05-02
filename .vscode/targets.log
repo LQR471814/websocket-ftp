@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Apr 14 10:03:15 2022
+# Make data base, printed on Sun May 01 20:09:28 2022
 
 # Variables
 
@@ -25,9 +25,9 @@ USERPROFILE = C:\Users\bramb
 # environment
 LOCALAPPDATA = C:\Users\bramb\AppData\Local
 # environment
-VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-44918f11-f3c6-4a13-9057-8fe33e7ea9fa-sock
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-baf7b37d-f061-450c-bcef-e447e12bdbd8-sock
 # environment
-VSCODE_CWD = C:\Users\bramb\AppData\Local\Programs\Microsoft VS Code
+VSCODE_CWD = C:\WINDOWS\system32
 # environment
 CHOCOLATEYINSTALL = C:\ProgramData\chocolatey
 # environment
@@ -43,7 +43,7 @@ GOPATH = C:\Users\bramb\Documents\Codes\Go
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_17644_RMQBHYLANQMOITQF
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_11724_VJITCYQPDSYYZOHE
 # environment
 FPS_BROWSER_USER_PROFILE_STRING = Default
 # environment
@@ -103,7 +103,7 @@ MAKEFILE_LIST := makefile
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 17644
+VSCODE_PID = 11724
 # environment
 CUDA_PATH = D:\NVIDIA GPU Computing Toolkit\CUDA\v11.6
 # automatic
@@ -343,6 +343,6 @@ makefile:
 # strcache performance: lookups = 45 / hit rate = 42%
 # hash-table stats:
 # Load=26/8192=0%, Rehash=0, Collisions=0/45=0%
-# Finished Make data base on Thu Apr 14 10:03:15 2022
+# Finished Make data base on Sun May 01 20:09:28 2022
 
  

@@ -62,6 +62,7 @@ export class BrowserFileStream implements FileStream {
 export class WritableStream {
     buffer: Uint8Array
     total: number
+    offset: number = 0
     written: number = 0
     private onFinishListeners: ((buffer: Uint8Array) => void)[] = []
 
@@ -75,7 +76,8 @@ export class WritableStream {
             return
         }
 
-        this.buffer.set(bytes, this.written)
+        this.buffer.set(bytes, this.offset)
+        this.offset += bytes.byteLength
         this.written += bytes.byteLength
 
         if (this.written >= this.total) {
@@ -85,22 +87,21 @@ export class WritableStream {
         }
     }
 
-    writeAsync(bytes: Promise<Uint8Array>, length: number) {
+    async writeAsync(bytes: Promise<Uint8Array>, length: number) {
         if (this.written + length > this.total) {
             return
         }
 
-        const offset = this.written
-        this.written += length
+        const offset = this.offset
+        this.offset += length
 
-        bytes.then(data => {
-            this.buffer.set(data, offset)
-            if (this.written >= this.total) {
-                for (const callback of this.onFinishListeners) {
-                    callback(this.buffer)
-                }
+        this.buffer.set(await bytes, offset)
+        this.written += length
+        if (this.written >= this.total) {
+            for (const callback of this.onFinishListeners) {
+                callback(this.buffer)
             }
-        })
+        }
     }
 
     onFinish(callback: (buffer: Uint8Array) => void) {
